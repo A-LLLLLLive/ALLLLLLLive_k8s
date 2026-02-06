@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alive-deployment
+spec:
+  replicas: 3
+  selector: # 어떤 pod를 관리할 것인지 기준
+    matchLabels:
+      app: nginx # selector 부분과 pod template의 label 부분은 반드시 일치
+  template: # deployment는 Pod를 직접 실행하지 않는다. Pod 템플릿을 가지고 replicaset이 pod 생성 진행.
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.8.9
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        
