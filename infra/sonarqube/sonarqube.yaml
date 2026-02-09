@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarqube
+  namespace: sonarqube
+spec:
+  type: LoadBalancer  # 외부 접속을 위해 로드밸런서 사용
+  ports:
+    - port: 9000
+      targetPort: 9000
+  selector:
+    app: sonarqube
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarqube
+  namespace: sonarqube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+    spec:
+      initContainers:
+        # Elasticsearch를 위해 커널 파라미터를 수정하는 필수 단계입니다.
+        - name: init-sysctl
+          image: busybox
+          command: ["sysctl", "-w", "vm.max_map_count=262144"]
+          securityContext:
+            privileged: true
+      containers:
+        - name: sonarqube
+          image: sonarqube:lts-community
+          ports:
+            - containerPort: 9000
+          env:
+            - name: SONAR_JDBC_URL
+              value: "jdbc:postgresql://sonarqube-db:5432/sonar"
+            - name: SONAR_JDBC_USERNAME
+              value: "sonar"
+            - name: SONAR_JDBC_PASSWORD
+              value: "sonar"
+            # 메모리 사용량을 강제로 제한합니다 (1.5GB)
+            - name: SONAR_CE_JAVAOPTS
+              value: "-Xmx512m -Xms128m"
+            - name: SONAR_WEB_JAVAOPTS
+              value: "-Xmx512m -Xms128m"
+          resources:
+            requests:
+              memory: "1.5Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
