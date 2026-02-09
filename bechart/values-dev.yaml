@@ -1,0 +1,29 @@
+replicaCount: 1
+
+# 임시 image
+image:
+  repository: nginx
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# 임시 env
+# env:
+#   SPRING_DATASOURCE_URL: jdbc:mysql://dev-mysql-mysql.dev-mysql.svc.cluster.local:3306/forever_mysql_db
+#   SPRING_DATASOURCE_USERNAME: root
+#   SPRING_HIKARI_MAX_POOL_SIZE: "5"
+#   SPRING_HIKARI_MAX_IDLE: "2"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
