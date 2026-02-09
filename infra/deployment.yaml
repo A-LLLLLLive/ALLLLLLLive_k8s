@@ -18,7 +18,7 @@ spec:
       containers:
       - name: backend-container
         # 젠킨스 파이프라인에서 빌드된 최신 태그가 자동으로 박히도록 설정되어 있는지 확인하세요.
-        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v9
+        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v11
         imagePullPolicy: Always # v9 같은 고정 태그라면 Always로 해야 덮어쓰기가 반영됩니다.
         ports:
         - containerPort: 8080  
