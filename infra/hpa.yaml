@@ -8,7 +8,7 @@ spec:
     kind: Deployment
     name: alive-deployment 
   minReplicas: 2        
-  maxReplicas: 10         
+  maxReplicas: 2         
   metrics:
   - type: Resource
     resource:
