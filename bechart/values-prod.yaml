@@ -1,0 +1,33 @@
+replicaCount: 1   # HPA 쓰기 전 기본 파드 수
+
+image:
+  repository: nginx
+  tag: latest     #  latest 금지 (롤백 지옥)
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  # port: 8080
+  port: 80
+
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+  limits:
+    cpu: "1000m"
+    memory: "1024Mi"
+
+ingress:
+  enabled: true
+  # 외부에서 접속할 실제 도메인 이름
+  host: api.alive.example.com
+  scheme: internet-facing # 인터넷 공개
+  # scheme: internet # VPC 내부 전용
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 60
