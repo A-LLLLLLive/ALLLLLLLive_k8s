@@ -8,6 +8,12 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:877009927021:certificate/9c45ecb6-0db8-4d01-b499-465aeb63a9ec
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+
+    alb.ingress.kubernetes.io/cors-allow-origin: 'https://olive0.cloud' # 실제 프론트엔드 도메인
+    alb.ingress.kubernetes.io/cors-allow-methods: 'GET, POST, PUT, DELETE, OPTIONS'
+    alb.ingress.kubernetes.io/cors-allow-headers: 'Content-Type, Authorization, X-Requested-With'
+    alb.ingress.kubernetes.io/cors-allow-credentials: 'true'
+
     # 🔹 헬스체크 추가
     alb.ingress.kubernetes.io/healthcheck-path: /health
     alb.ingress.kubernetes.io/success-codes: '200'
