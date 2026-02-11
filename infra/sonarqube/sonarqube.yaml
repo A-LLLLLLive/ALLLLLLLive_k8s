@@ -3,8 +3,11 @@ kind: Service
 metadata:
   name: sonarqube
   namespace: sonarqube
+  annotations:
+    # 이 한 줄이 핵심입니다! 로드밸런서를 인터넷 접속이 가능한 '퍼블릭 서브넷'으로 보내줍니다.
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
 spec:
-  type: LoadBalancer  # 외부 접속을 위해 로드밸런서 사용
+  type: LoadBalancer
   ports:
     - port: 9000
       targetPort: 9000
@@ -27,7 +30,6 @@ spec:
         app: sonarqube
     spec:
       initContainers:
-        # Elasticsearch를 위해 커널 파라미터를 수정하는 필수 단계입니다.
         - name: init-sysctl
           image: busybox
           command: ["sysctl", "-w", "vm.max_map_count=262144"]
@@ -45,7 +47,6 @@ spec:
               value: "sonar"
             - name: SONAR_JDBC_PASSWORD
               value: "sonar"
-            # 메모리 사용량을 강제로 제한합니다 (1.5GB)
             - name: SONAR_CE_JAVAOPTS
               value: "-Xmx512m -Xms128m"
             - name: SONAR_WEB_JAVAOPTS
