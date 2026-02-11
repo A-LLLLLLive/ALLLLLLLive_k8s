@@ -1,0 +1,34 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: default
+spec:
+  template:
+    spec:
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: default # 위에서 만든 EC2NodeClass 이름과 일치해야 함
+      
+      requirements:
+        # 스팟 인스턴스를 우선 사용하고 싶다면 spot, on-demand 순으로 배치
+        - key: "karpenter.sh/capacity-type"
+          operator: In
+          values: ["on-demand"]
+        # 인스턴스 사양 제한 (너무 작은 t 계열은 제외하는 것이 좋음)
+        - key: "karpenter.k8s.aws/instance-category"
+          operator: In
+          values: ["c", "m", "r"]
+        - key: "kubernetes.io/arch"
+          operator: In
+          values: ["amd64"]
+
+  # 비용 최적화 (Consolidation) 설정
+  disruption:
+    consolidationPolicy: WhenUnderutilized # 노드 낭비 시 자동으로 합치거나 작은 걸로 교체
+    expireAfter: 720h # 30일이 지나면 노드를 자동으로 교체 (보안/업데이트 목적)
+
+  # 클러스터 전체 리소스 한도 (안전 장치)
+  limits:
+    cpu: 100
+    memory: 100Gi

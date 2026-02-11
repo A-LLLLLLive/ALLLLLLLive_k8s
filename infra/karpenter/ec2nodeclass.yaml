@@ -1,0 +1,15 @@
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: default
+spec:
+  amiFamily: AL2
+  role: KarpenterNodeRole
+  
+  subnetSelectorTerms: # worker node가 생성될 subnet 선택 (tag 기반)
+    - tags:
+        karpenter.sh/discovery: alive-cluster # subnet에 해당 태그가 달려있어야 선택됨
+  
+  securityGroupSelectorTerms: # worker node에 적용할 보안그룹 선택
+    - tags:
+        karpenter.sh/discovery: alive-cluster # 보안그룹에 해당 태그가 달려있어야 선택됨.

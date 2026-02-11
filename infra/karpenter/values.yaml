@@ -1,0 +1,9 @@
+serviceAccount:
+  create: true
+  name: karpenter
+  annotations:
+    eks.amazonaws.com/role-arn: "" 
+
+settings:
+  clusterName: ""
+  clusterEndpoint: ""
