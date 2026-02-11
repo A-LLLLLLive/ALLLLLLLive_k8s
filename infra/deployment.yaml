@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: alive-deployment
-  namespace: default      # 네임스페이스를 명시하는 것이 안전합니다.
+  namespace: backend      # 네임스페이스를 명시하는 것이 안전합니다.
   labels:
     app: alive-app
 spec:
