@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alive-app
 spec:
-  replicas: 1             # 소나큐브 돌리는 동안은 메모리 확보를 위해 1개로 줄이는 걸 권장해요!
+  replicas: 2             # 소나큐브 돌리는 동안은 메모리 확보를 위해 1개로 줄이는 걸 권장해요!
   selector:
     matchLabels:
       app: alive-app    
