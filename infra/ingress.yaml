@@ -6,7 +6,11 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:elasticloadbalancing:ap-northeast-2:877009927021:loadbalancer/app/k8s-backend-aliveing-2b38371c59/046ffa16ee88fc02
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:877009927021:certificate/9c45ecb6-0db8-4d01-b499-465aeb63a9ec
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    # 🔹 헬스체크 추가
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/success-codes: '200'
 spec:
   ingressClassName: alb
   rules:
@@ -18,4 +22,4 @@ spec:
               service:
                 name: alive-service
                 port:
-                  number: 80 
+                  number: 80
