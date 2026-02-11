@@ -22,4 +22,4 @@ spec:
               service:
                 name: alive-service
                 port:
-                  number: 80
+                  number: 80 
