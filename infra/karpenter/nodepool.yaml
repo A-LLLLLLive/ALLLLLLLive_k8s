@@ -5,6 +5,8 @@ metadata:
 spec:
   template:
     spec:
+      expireAfter: 3m
+      
       nodeClassRef:
         group: karpenter.k8s.aws
         kind: EC2NodeClass
@@ -37,7 +39,6 @@ spec:
   # 비용 최적화 설정
   disruption:
     consolidationPolicy: WhenUnderutilized # 노드 낭비 시 자동으로 합치거나 작은 걸로 교체
-    expireAfter: 3m 
 
   # 클러스터 전체 리소스 한도 (안전 장치)
   limits:
