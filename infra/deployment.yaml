@@ -1,34 +1,31 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1 # 1. API 버전 변경
+kind: Rollout                   # 2. 객체 타입 변경
 metadata:
   name: alive-deployment
-  namespace: default      # 네임스페이스를 명시하는 것이 안전합니다.
+  namespace: default
   labels:
     app: alive-app
 spec:
-  replicas: 1             # 소나큐브 돌리는 동안은 메모리 확보를 위해 1개로 줄이는 걸 권장해요!
+  replicas: 4                   # Canary를 눈으로 확인하려면 리플리카 수가 좀 있는 게 좋습니다.
   selector:
     matchLabels:
-      app: alive-app    
+      app: alive-app
   template:
     metadata:
       labels:
-        app: alive-app  
+        app: alive-app
     spec:
-      containers:
-      - name: backend-container
-        # 젠킨스 파이프라인에서 빌드된 최신 태그가 자동으로 박히도록 설정되어 있는지 확인하세요.
-        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v6
-        imagePullPolicy: Always # v9 같은 고정 태그라면 Always로 해야 덮어쓰기가 반영됩니다.
-        ports:
-        - containerPort: 8080  
-        resources:
-          requests:
-            cpu: "200m"
-            memory: "400Mi" # 소나큐브를 위해 요청량을 살짝 다이어트 시켰습니다.
-          limits:
-            cpu: "500m"
-            memory: "768Mi" # 노드가 4GiB뿐이라 1GiB는 조금 부담될 수 있어요.
-      # ECR에서 이미지를 가져오기 위해 아까 만든 시크릿을 반드시 넣어줘야 합니다!
       imagePullSecrets:
       - name: ecr-registry-key
+      containers:
+      - name: backend-container
+        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v6
+        ports:
+        - containerPort: 8080
+  strategy:                     # 3. Canary 전략 추가
+    canary:
+      steps:
+      - setWeight: 25           # 첫 번째 단계: 25% 트래픽 배정 (Pod 4개 중 1개만 신버전)
+      - pause: {duration: 30s}  # 30초 동안 대기하며 상태 확인
+      - setWeight: 50           # 두 번째 단계: 50%까지 확대
+      - pause: {}               # 무기한 대기 (ArgoCD에서 직접 'Resume' 눌러야 최종 배포)
