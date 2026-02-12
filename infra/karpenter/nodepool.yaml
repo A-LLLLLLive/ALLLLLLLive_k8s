@@ -10,7 +10,7 @@ spec:
         kind: EC2NodeClass
         name: default # 위에서 만든 EC2NodeClass 이름과 일치해야 함
 
-      expireAfter: 3m
+      expireAfter: 10m
       
       requirements:
         - key: "topology.kubernetes.io/zone"
