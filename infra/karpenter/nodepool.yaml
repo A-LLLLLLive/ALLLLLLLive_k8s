@@ -43,5 +43,5 @@ spec:
 
   # 클러스터 전체 리소스 한도 (안전 장치)
   limits:
-    cpu: 8
+    cpu: 20
     memory: 16Gi
