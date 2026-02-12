@@ -18,17 +18,17 @@ spec:
         # 스팟 인스턴스를 우선 사용하고 싶다면 spot, on-demand 순으로 배치
         - key: "karpenter.sh/capacity-type"
           operator: In
-          values: ["spot"]
+          values: ["on-demand"]
           
         # 인스턴스 사양 제한 (너무 작은 t 계열은 제외하는 것이 좋음)
-        - key: "karpenter.k8s.aws/instance-category"
+        - key: "karpenter.k8s.aws/instance-family"
           operator: In
-          values: ["c", "m", "r"]
+          values: ["t3"]
           
         # 인스턴스 크기 제한 (너무 크고 비싼 사양 제외)
         - key: "karpenter.k8s.aws/instance-size"
           operator: In
-          values: ["medium", "large"] # 2xlarge 이상은 생성 안 됨
+          values: ["medium"] # 2xlarge 이상은 생성 안 됨
           
         - key: "kubernetes.io/arch"
           operator: In
