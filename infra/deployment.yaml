@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: alive-deployment
-  namespace: backend      # 네임스페이스를 명시하는 것이 안전합니다.
+  namespace: backend
   labels:
     app: alive-app
 spec:
-  replicas: 2             # 소나큐브 돌리는 동안은 메모리 확보를 위해 1개로 줄이는 걸 권장해요!
+  replicas: 2  
   selector:
     matchLabels:
       app: alive-app    
@@ -15,15 +15,20 @@ spec:
       labels:
         app: alive-app  
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: "topology.kubernetes.io/zone"
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: alive-app
       containers:
       - name: backend-container
-        # 젠킨스 파이프라인에서 빌드된 최신 태그가 자동으로 박히도록 설정되어 있는지 확인하세요.
         image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v19
-        imagePullPolicy: Always # v9 같은 고정 태그라면 Always로 해야 덮어쓰기가 반영됩니다.
+        imagePullPolicy: Always 
         ports:
         - containerPort: 8080 
-
-        # readinessProbe 
+        
         readinessProbe:
           httpGet:
             path: /health
@@ -35,10 +40,9 @@ spec:
         resources:
           requests:
             cpu: "200m"
-            memory: "400Mi" # 소나큐브를 위해 요청량을 살짝 다이어트 시켰습니다.
+            memory: "400Mi" 
           limits:
             cpu: "500m"
-            memory: "768Mi" # 노드가 4GiB뿐이라 1GiB는 조금 부담될 수 있어요.
-      # ECR에서 이미지를 가져오기 위해 아까 만든 시크릿을 반드시 넣어줘야 합니다!
+            memory: "768Mi"
       imagePullSecrets:
       - name: ecr-registry-key
