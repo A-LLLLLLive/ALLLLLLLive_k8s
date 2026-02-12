@@ -11,6 +11,9 @@ spec:
         name: default # 위에서 만든 EC2NodeClass 이름과 일치해야 함
       
       requirements:
+        - key: "topology.kubernetes.io/zone"
+          operator: In
+          values: ["ap-northeast-2a", "ap-northeast-2c"] # 사용할 AZ 명시
         # 스팟 인스턴스를 우선 사용하고 싶다면 spot, on-demand 순으로 배치
         - key: "karpenter.sh/capacity-type"
           operator: In
@@ -23,7 +26,7 @@ spec:
           operator: In
           values: ["amd64"]
 
-  # 비용 최적화 (Consolidation) 설정
+  # 비용 최적화 설정
   disruption:
     consolidationPolicy: WhenUnderutilized # 노드 낭비 시 자동으로 합치거나 작은 걸로 교체
     expireAfter: 720h # 30일이 지나면 노드를 자동으로 교체 (보안/업데이트 목적)
