@@ -3,7 +3,9 @@ kind: EC2NodeClass
 metadata:
   name: default
 spec:
-  amiFamily: AL2
+  amiSelectorTerms:
+    - alias: al2023@latest
+    
   role: KarpenterNodeRole
   
   subnetSelectorTerms: # worker node가 생성될 subnet 선택 (tag 기반)
