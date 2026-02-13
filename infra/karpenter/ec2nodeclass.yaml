@@ -4,8 +4,8 @@ metadata:
   name: default
 spec:
   amiFamily: AL2
-  #amiSelectorTerms:
-  #  - alias: al2023@latest
+  amiSelectorTerms:
+    - alias: al2@latest
     
   role: KarpenterNodeRole
   
