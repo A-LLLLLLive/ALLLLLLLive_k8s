@@ -23,14 +23,10 @@ spec:
           values: ["on-demand"]
           
         # 인스턴스 사양 제한 (너무 작은 t 계열은 제외하는 것이 좋음)
-        - key: "karpenter.k8s.aws/instance-family"
+        - key: "node.kubernetes.io/instance-type"
           operator: In
-          values: ["t3"]
-          
-        # 인스턴스 크기 제한 (너무 크고 비싼 사양 제외)
-        - key: "karpenter.k8s.aws/instance-size"
-          operator: In
-          values: ["medium"] # 2xlarge 이상은 생성 안 됨
+          values: ["t3.medium"]
+
           
         - key: "kubernetes.io/arch"
           operator: In
