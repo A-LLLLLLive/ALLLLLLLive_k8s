@@ -3,8 +3,9 @@ kind: EC2NodeClass
 metadata:
   name: default
 spec:
-  amiSelectorTerms:
-    - alias: al2023@latest
+  amiFamily: AL2
+  #amiSelectorTerms:
+  #  - alias: al2023@latest
     
   role: KarpenterNodeRole
   
