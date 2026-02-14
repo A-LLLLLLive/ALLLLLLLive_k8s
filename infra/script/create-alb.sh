@@ -32,7 +32,12 @@ eksctl utils associate-iam-oidc-provider \
   --approve
 
 echo "=== 5. 기존 IAM ServiceAccount 삭제 (있으면) ==="
-kubectl -n $NAMESPACE delete serviceaccount $SERVICE_ACCOUNT_NAME --ignore-not-found
+eksctl delete iamserviceaccount \
+    --cluster $CLUSTER_NAME \
+    --namespace $NAMESPACE \
+    --name $SERVICE_ACCOUNT_NAME \
+    --region $AWS_REGION \
+    || echo "삭제할 ServiceAccount가 없거나 이미 삭제됨"
 
 echo "=== 6. IAM ServiceAccount 생성 ==="
 eksctl create iamserviceaccount \
