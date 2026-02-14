@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 ### ===== 설정값 =====
 CLUSTER_NAME="alive-cluster"

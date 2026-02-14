@@ -23,25 +23,12 @@ spec:
           labelSelector:
             matchLabels:
               app: alive-app
-
-      volumes: # 
-        - name: secrets-store
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: aws-secrets
-
       containers:
       - name: backend-container
         image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v25
         imagePullPolicy: Always 
         ports:
         - containerPort: 8080 
-        volumeMounts: #
-            - name: secrets-store
-              mountPath: /mnt/secrets
-              readOnly: true
         readinessProbe:
           httpGet:
             path: /health
