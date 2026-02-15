@@ -15,7 +15,7 @@ spec:
       labels:
         app: alive-app  
     spec:
-      serviceAccountName: backend-irsa-sa
+      serviceAccountName: backend-secrets-sa
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: "topology.kubernetes.io/zone"
