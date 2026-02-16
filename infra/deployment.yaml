@@ -31,8 +31,8 @@ spec:
         - containerPort: 8080
 
         env:
-        - name: APP_ROLE
-          value: API   # 🔥 핵심
+        - name: SPRING_PROFILES_ACTIVE
+          value: api   # 🔥 핵심
 
         # Valkey
         - name: VALKEY_PASSWORD 
@@ -72,6 +72,13 @@ spec:
             secretKeyRef:
               name: db-auth-sync
               key: PASSWORD
+
+        # sqs
+        - name: order-queue-url
+          valueFrom:
+            secretKeyRef:
+              name: sqs-auth-sync
+              key: order-queue-url
 
         readinessProbe:
           httpGet:
