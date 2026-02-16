@@ -31,11 +31,44 @@ spec:
         - containerPort: 8080
 
         env:
+        # Valkey
         - name: VALKEY_PASSWORD 
           valueFrom:
             secretKeyRef:
               name: valkey-auth-sync # SPC의 secretObjects.secretName과 일치
               key: password          # SPC의 secretObjects.data.key와 일치 
+        
+        # Database
+        - name: MASTER_HOST
+          valueFrom:
+            secretKeyRef:
+              name: db-auth-sync
+              key: MASTER_HOST
+        - name: SLAVE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: db-auth-sync
+              key: SLAVE_HOST
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: db-auth-sync
+              key: PORT
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: db-auth-sync
+              key: DB_NAME
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-auth-sync
+              key: USERNAME
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-auth-sync
+              key: PASSWORD
 
         readinessProbe:
           httpGet:
