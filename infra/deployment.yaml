@@ -28,7 +28,15 @@ spec:
         image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v52
         imagePullPolicy: Always 
         ports:
-        - containerPort: 8080 
+        - containerPort: 8080
+
+        env:
+        - name: VALKEY_PASSWORD 
+          valueFrom:
+            secretKeyRef:
+              name: valkey-auth-sync # SPC의 secretObjects.secretName과 일치
+              key: password          # SPC의 secretObjects.data.key와 일치 
+
         readinessProbe:
           httpGet:
             path: /health
@@ -44,5 +52,19 @@ spec:
           limits:
             cpu: "200m" 
             memory: "512Mi"
+
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets"
+          readOnly: true
+
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "alive-valkey-spc"
+
       imagePullSecrets:
       - name: ecr-registry-key
