@@ -72,11 +72,11 @@ spec:
             secretKeyRef:
               name: db-auth-sync
               key: PASSWORD
-        - name: order-queue-url
+        - name: ORDER_QUEUE_URL
           valueFrom:
             secretKeyRef:
               name: db-auth-sync
-              key: order-queue-url
+              key: ORDER_QUEUE_URL
 
         # # sqs
         # - name: order-queue-url
