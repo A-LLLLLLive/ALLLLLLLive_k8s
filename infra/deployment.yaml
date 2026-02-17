@@ -77,6 +77,20 @@ spec:
             secretKeyRef:
               name: db-auth-sync
               key: ORDER_QUEUE_URL
+        - name: DD_SERVICE
+          value: "alive-deploy"
+        - name: DD_ENV
+          value: "prod"
+        - name: DD_VERSION
+          value: "v61"
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DD_TRACE_AGENT_PORT
+          value: "8126"
+        - name: DD_LOGS_INJECTION
+          value: "true"
 
         # # sqs
         # - name: order-queue-url
