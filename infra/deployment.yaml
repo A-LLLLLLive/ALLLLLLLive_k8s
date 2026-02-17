@@ -72,13 +72,18 @@ spec:
             secretKeyRef:
               name: db-auth-sync
               key: PASSWORD
-
-        # sqs
         - name: order-queue-url
           valueFrom:
             secretKeyRef:
-              name: sqs-auth-sync
+              name: db-auth-sync
               key: order-queue-url
+
+        # # sqs
+        # - name: order-queue-url
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: sqs-auth-sync
+        #       key: order-queue-url
 
         readinessProbe:
           httpGet:
