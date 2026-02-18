@@ -26,7 +26,7 @@ spec:
 
       containers:
       - name: backend-container
-        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v75
+        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v82
         imagePullPolicy: Always
 
         env:
@@ -34,11 +34,21 @@ spec:
           value: order-post   # 🔥 핵심
 
         # (👇 아래는 전부 기존이랑 동일)
+        # - name: VALKEY_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: valkey-auth-sync
+        #       key: password
+        - name: VALKEY_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: valkey-endpoint-sync
+              key: VALKEY_ENDPOINT
         - name: VALKEY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: valkey-auth-sync
-              key: password
+              name: valkey-endpoint-sync
+              key: VALKEY_PASSWORD
 
         - name: MASTER_HOST
           valueFrom:
