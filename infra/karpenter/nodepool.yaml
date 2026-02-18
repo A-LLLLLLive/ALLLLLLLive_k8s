@@ -30,5 +30,5 @@ spec:
     consolidationPolicy: WhenEmptyOrUnderutilized
     consolidateAfter: 1m
   limits:
-    cpu: 20
-    memory: 16Gi
+    cpu: 24
+    memory: 76Gi
