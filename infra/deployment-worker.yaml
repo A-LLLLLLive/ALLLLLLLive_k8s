@@ -44,6 +44,11 @@ spec:
             secretKeyRef:
               name: valkey-endpoint-sync
               key: VALKEY_ENDPOINT
+        - name: VALKEY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: valkey-endpoint-sync
+              key: VALKEY_PASSWORD
 
         - name: MASTER_HOST
           valueFrom:
