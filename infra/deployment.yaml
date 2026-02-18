@@ -35,12 +35,16 @@ spec:
           value: api   # 🔥 핵심
 
         # Valkey
-        - name: VALKEY_PASSWORD 
+        # deployment.yaml
+        - name: VALKEY_ENDPOINT 
           valueFrom:
             secretKeyRef:
-              name: valkey-auth-sync # SPC의 secretObjects.secretName과 일치
-              key: password          # SPC의 secretObjects.data.key와 일치 
-        
+              name: valkey-auth-sync
+              key: valkey_endpoint
+              
+        - name: VALKEY_USER  
+          value: "alive-valkey-user"
+          
         # Database
         - name: MASTER_HOST
           valueFrom:
