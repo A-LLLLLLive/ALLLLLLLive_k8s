@@ -36,14 +36,11 @@ spec:
 
         # Valkey
         # deployment.yaml
-        - name: VALKEY_ENDPOINT 
+        - name: VALKEY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: valkey-auth-sync
-              key: valkey_endpoint
-              
-        - name: VALKEY_USER  
-          value: "alive-valkey-user"
+              name: valkey-auth-sync # SPC의 secretObjects.secretName과 일치
+              key: password          # SPC의 secretObjects.data.key와 일치 
           
         # Database
         - name: MASTER_HOST
