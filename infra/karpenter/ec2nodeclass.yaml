@@ -5,7 +5,7 @@ metadata:
 spec:
   amiFamily: AL2023
   amiSelectorTerms:
-    - alias: al2@latest
+    - alias: AL2023@latest
 
   role: KarpenterNodeRole
 
