@@ -11,7 +11,7 @@ spec:
   minReplicaCount: 1    # 평소에 최소 1개는 띄워둠
   maxReplicaCount: 40   # 주문 폭주 시 최대 20개까지 확장
   pollingInterval: 30   # 30초마다 SQS 확인
-  cooldownPeriod:  300  # 주문이 끝나도 5분간은 노드를 유지 (잦은 생성/삭제 방지)
+  cooldownPeriod:  180  # 주문이 끝나도 5분간은 노드를 유지 (잦은 생성/삭제 방지)
 
   triggers:
     - type: aws-sqs-queue
