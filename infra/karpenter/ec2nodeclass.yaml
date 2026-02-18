@@ -3,16 +3,20 @@ kind: EC2NodeClass
 metadata:
   name: default
 spec:
+  # EKS 1.33+ 권장 이미지 패밀리
   amiFamily: AL2023
   amiSelectorTerms:
     - alias: al2023@latest
 
+  # IAM Role 설정 (기존 Role 이름 유지)
   role: KarpenterNodeRole
 
-  subnetSelectorTerms: # worker node가 생성될 subnet 선택 (tag 기반)
-    - tags:
-        karpenter.sh/discovery: alive-cluster # subnet에 해당 태그가 달려있어야 선택됨
+  # 알려주신 서브넷 ID 직접 지정 (검색 에러 방지)
+  subnetSelectorTerms:
+    - id: "subnet-08cbeadd894a2c74e"
+    - id: "subnet-0d36122299deaa681"
 
-  securityGroupSelectorTerms: # worker node에 적용할 보안그룹 선택
-    - tags:
-        karpenter.sh/discovery: alive-cluster # 보안그룹에 해당 태그가 달려있어야 선택됨.
+  # 알려주신 보안 그룹 ID 직접 지정 (클러스터용 + 노드용)
+  securityGroupSelectorTerms:
+    - id: "sg-0653338636823be36"
+    - id: "sg-020821f1488a8b524"
