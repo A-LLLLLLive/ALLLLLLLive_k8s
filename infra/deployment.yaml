@@ -25,7 +25,7 @@ spec:
               app: alive-app
       containers:
       - name: backend-container
-        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v74
+        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v75
         imagePullPolicy: Always 
         ports:
         - containerPort: 8080
