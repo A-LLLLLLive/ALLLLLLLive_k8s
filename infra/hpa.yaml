@@ -8,11 +8,11 @@ spec:
     kind: Deployment
     name: alive-deployment 
   minReplicas: 6        
-  maxReplicas: 40
+  maxReplicas: 60
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: 40
