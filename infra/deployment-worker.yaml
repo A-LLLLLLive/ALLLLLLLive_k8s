@@ -36,7 +36,7 @@ spec:
 
       containers:
       - name: backend-container
-        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v82
+        image: 877009927021.dkr.ecr.ap-northeast-2.amazonaws.com/al7/ci-jenkins:v83
         imagePullPolicy: Always
 
         env:
