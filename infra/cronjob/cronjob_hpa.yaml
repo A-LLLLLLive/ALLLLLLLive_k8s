@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backend-prewarm-up
+  namespace: backend
+spec:
+  schedule: "40 12 * * *" # 매일 13:00 -> 12:40(20분 전에 미리 warm up)
+  timeZone: "Asia/Seoul"  # K8s 1.27+ 버전 기준 (한국 시간)
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: prewarm-scaler-sa
+          containers:
+          - name: scaler
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            # HPA의 minReplicas를 20으로 수정하여 즉시 파드와 노드를 확보
+            - kubectl patch hpa alive-hpa -n backend --type merge -p '{"spec":{"minReplicas":20}}'
+          restartPolicy: OnFailure # 실패했을 때만 다시 시도
