@@ -1,35 +1,32 @@
-# 1. SA(신분증) 만들기
+# setup.yaml
+# 1. 신분증(SA) 만들기 - backend에 생성
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: prewarm-scaler-sa
-  namespace: backend # backend namespace에서만 유효하다.
----
-
-# 2. 권한(role) 정의하기 : "HPA를 조회하고 수정할 수 있다"
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: hpa-scaler-role
   namespace: backend
-rules:
-  - apiGroups: ["autoscaling"]        
-    resources: ["horizontalpodautoscalers"] 
-    verbs: ["get", "patch", "update"]    
-
 ---
-
-# 3. 연결(RoleBinding)하기: "위 신분증에 위 권한을 부여한다"
+# 2. 전 구역용 권한 설계도(ClusterRole) - 클러스터 전체 공용
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: hpa-cross-namespace-scaler-role
+rules:
+  - apiGroups: ["autoscaling"]
+    resources: ["horizontalpodautoscalers"]
+    verbs: ["get", "patch", "update"]
+---
+# 3. 연결(RoleBinding) - karpenter 구역에서 권한 행사 허용
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: hpa-scaler-rolebinding
-  namespace: backend
+  name: hpa-scaler-role
+  namespace: karpenter  # 권한이 발동될 장소 (HPA가 있는 곳)
 subjects:
   - kind: ServiceAccount
-    name: prewarm-scaler-sa               
-    namespace: backend
+    name: prewarm-scaler-sa
+    namespace: backend   # 신분증을 발급받은 장소
 roleRef:
-  kind: Role
-  name: hpa-scaler-role
+  kind: ClusterRole
+  name: hpa-cross-namespace-scaler-role
   apiGroup: rbac.authorization.k8s.io
