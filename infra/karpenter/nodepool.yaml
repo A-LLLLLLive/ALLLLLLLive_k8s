@@ -5,11 +5,6 @@ metadata:
 spec:
   template:
     spec:
-      taints:
-        - key: "karpenter.sh/capacity-type"
-          value: "spot"
-          effect: "NoSchedule"
-
       nodeClassRef:
         group: karpenter.k8s.aws
         kind: EC2NodeClass
