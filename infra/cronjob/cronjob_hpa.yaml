@@ -18,5 +18,5 @@ spec:
             - /bin/sh
             - -c
             # HPA의 minReplicas를 20으로 수정하여 즉시 파드와 노드를 확보
-            - kubectl patch hpa alive-hpa -n backend --type merge -p '{"spec":{"minReplicas":20}}'
+            - kubectl patch hpa alive-hpa -n backend --type merge -p '{"spec":{"minReplicas":6}}'
           restartPolicy: OnFailure # 실패했을 때만 다시 시도
