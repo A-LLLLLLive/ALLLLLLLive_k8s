@@ -21,7 +21,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: hpa-scaler-role
-  namespace: karpenter  # 권한이 발동될 장소 (HPA가 있는 곳)
+  namespace: backend  # 권한이 발동될 장소 (HPA가 있는 곳)
 subjects:
   - kind: ServiceAccount
     name: prewarm-scaler-sa
