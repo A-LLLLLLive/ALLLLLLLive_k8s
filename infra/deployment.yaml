@@ -125,10 +125,10 @@ spec:
 
         resources:
           requests:
-            cpu: "200m"
+            cpu: "300m"
             memory: "256Mi" # 노드가 2cpu / 4Gi -> pod 6개이면 0.1cpu = 20개 정도? / 0.256Gi = 18개
           limits:
-            cpu: "400m" 
+            cpu: "500m" 
             memory: "512Mi"
 
         volumeMounts:
