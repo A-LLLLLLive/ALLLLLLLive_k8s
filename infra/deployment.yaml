@@ -20,14 +20,8 @@ spec:
       nodeSelector:
         karpenter.sh/nodepool: default
 
-      tolerations:
-      - key: "karpenter.sh/capacity-type"
-        operator: "Equal"
-        value: "spot"
-        effect: "NoSchedule"
-
       topologySpreadConstraints:
-        - maxSkew: 1
+        - maxSkew: 2
           topologyKey: "topology.kubernetes.io/zone"
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
