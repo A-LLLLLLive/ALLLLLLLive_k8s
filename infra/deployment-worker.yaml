@@ -111,19 +111,19 @@ spec:
         #       name: sqs-auth-sync
         #       key: order-queue-url
 
-        startupProbe:
-          httpGet:
-            path: /actuator/health/liveness
-            port: 8080
-          failureThreshold: 30   # 30 * 10s = 최대 5분 기동 허용
-          periodSeconds: 10
+        # startupProbe:
+        #   httpGet:
+        #     path: /actuator/health/liveness
+        #     port: 8080
+        #   failureThreshold: 30   # 30 * 10s = 최대 5분 기동 허용
+        #   periodSeconds: 10
 
-        readinessProbe:
-          httpGet:
-            path: /actuator/health/readiness
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
+        # readinessProbe:
+        #   httpGet:
+        #     path: /actuator/health/readiness
+        #     port: 8080
+        #   periodSeconds: 5
+        #   failureThreshold: 1
           
         resources:
           requests:
