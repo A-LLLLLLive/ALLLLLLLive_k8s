@@ -16,10 +16,4 @@ spec:
       target:
         type: Utilization
         averageUtilization: 30
-  behavior:
-    scaleUp:
-      stabilizationWindowSeconds: 0 # 부하 감지 즉시 반응
-      policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 15
+
