@@ -4,7 +4,7 @@ metadata:
   name: placeholder
   namespace: kube-system
 spec:
-  replicas: 2 # 총 2개의 여유 공간 확보
+  replicas: 4 # 총 2개의 여유 공간 확보
   selector:
     matchLabels:
       app: placeholder
@@ -44,3 +44,4 @@ spec:
           requests:
             cpu: "300m"
             memory: "256Mi"
+
