@@ -10,7 +10,7 @@ spec:
   
   minReplicaCount: 4    # 평소에 최소 1개는 띄워둠
   maxReplicaCount: 10   # 주문 폭주 시 최대 20개까지 확장
-  pollingInterval: 10   # 30초마다 SQS 확인
+  pollingInterval: 5   # 10초마다 SQS 확인
   cooldownPeriod:  60  # 주문이 끝나도 5분간은 노드를 유지 (잦은 생성/삭제 방지)
 
   triggers:
