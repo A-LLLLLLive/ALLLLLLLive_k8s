@@ -4,7 +4,7 @@ metadata:
   name: alive-apps-pdb      # PDB의 이름 (자유롭게 지정)
   namespace: backend    # 대상 앱이 배포된 네임스페이스
 spec:
-  minAvailable: 1     # 동시에 중단될 수 있는 파드의 최대 개수
+  minAvailable: 50%     
   selector:
     matchLabels:
       app: alive-app # 중요: 대상 Deployment의 template.metadata.labels와 일치해야 함
@@ -16,7 +16,7 @@ metadata:
   name: alive-apps-pdb      # PDB의 이름 (자유롭게 지정)
   namespace: backend    # 대상 앱이 배포된 네임스페이스
 spec:
-  minAvailable: 1     # 동시에 중단될 수 있는 파드의 최대 개수
+  minAvailable: 50% 
   selector:
     matchLabels:
       app: alive-order-post # 중요: 대상 Deployment의 template.metadata.labels와 일치해야 함
