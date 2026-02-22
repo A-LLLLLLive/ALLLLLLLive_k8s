@@ -18,5 +18,74 @@ spec:
             - /bin/sh
             - -c
             # HPA의 minReplicas를 20으로 수정하여 즉시 파드와 노드를 확보
-            - kubectl patch hpa alive-hpa -n backend --type merge -p '{"spec":{"minReplicas":6}}'
+            - kubectl patch hpa alive-hpa -n backend --type merge -p '{"spec":{"minReplicas":20}}'
           restartPolicy: OnFailure # 실패했을 때만 다시 시도
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backend-prewarm-down
+  namespace: backend
+spec:
+  schedule: "30 13 * * *" # 13:30에 다시 원래의 hpa minreplicas 값으로 수정
+  timeZone: "Asia/Seoul"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: prewarm-scaler-sa
+          containers:
+          - name: scaler
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            # 트래픽이 빠지면 다시 평시 수준(예: 6개)으로 복구
+            - kubectl patch hpa alive-hpa -n backend --type merge -p '{"spec":{"minReplicas":10}}'
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backend-prewarm-up
+  namespace: backend
+spec:
+  schedule: "40 19 * * *" # 매일 20:00 -> 19:40 (20분 전에 미리 warm up)
+  timeZone: "Asia/Seoul"  # K8s 1.27+ 버전 기준 (한국 시간)
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: prewarm-scaler-sa
+          containers:
+          - name: scaler
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            # HPA의 minReplicas를 20으로 수정하여 즉시 파드와 노드를 확보
+            - kubectl patch hpa alive-hpa -n backend --type merge -p '{"spec":{"minReplicas":20}}'
+          restartPolicy: OnFailure # 실패했을 때만 다시 시도
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backend-prewarm-down
+  namespace: backend
+spec:
+  schedule: "30 20 * * *" # 20:30에 다시 원래의 hpa minreplicas 값으로 수정
+  timeZone: "Asia/Seoul"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: prewarm-scaler-sa
+          containers:
+          - name: scaler
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            # 트래픽이 빠지면 다시 평시 수준(예: 6개)으로 복구
+            - kubectl patch hpa alive-hpa -n backend --type merge -p '{"spec":{"minReplicas":10}}'
+          restartPolicy: OnFailure
