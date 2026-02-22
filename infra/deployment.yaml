@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alive-app
 spec:
-  replicas: 10
+  replicas: 12
   selector:
     matchLabels:
       app: alive-app    
@@ -121,13 +121,15 @@ spec:
             port: 8080
           failureThreshold: 30   # 30 * 10s = 최대 5분 기동 허용
           periodSeconds: 10
+          initialDelaySeconds: 20   # 컨테이너 기동 초기 20초 동안 Probe 미실행
 
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
           periodSeconds: 5
-          failureThreshold: 1
+          failureThreshold: 3        # 1 → 3으로 늘려 안정성 확보
+          initialDelaySeconds: 120    # 신규 Pod가 스케일링될 때 바로 Ready 판단 안함
 
         resources:
           requests:
