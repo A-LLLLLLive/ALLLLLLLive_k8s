@@ -7,13 +7,13 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: alive-deployment 
-  minReplicas: 10
-  maxReplicas: 15
+  minReplicas: 25
+  maxReplicas: 35
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 30
+        averageUtilization: 50
 
