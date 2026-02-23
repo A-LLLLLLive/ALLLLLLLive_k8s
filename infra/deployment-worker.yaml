@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alive-order-post
 spec:
-  replicas: 10   # 주문 API보다 적게 시작
+  replicas: 15   # 주문 API보다 적게 시작
   selector:
     matchLabels:
       app: alive-order-post
