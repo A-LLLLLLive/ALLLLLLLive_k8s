@@ -5,7 +5,7 @@ export const options = {
   scenarios: {
     tps_1500_test: {
       executor: 'constant-arrival-rate',
-      rate: 6600,          // 🎯 목표 TPS
+      rate: 1500,          // 🎯 목표 TPS
       timeUnit: '1s',
       duration: '5m',
       preAllocatedVUs: 1200,
