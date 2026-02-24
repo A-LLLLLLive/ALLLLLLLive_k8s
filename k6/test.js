@@ -7,15 +7,27 @@ import { check, sleep } from 'k6';
  * - endpoint / method 별 latency 분리
  * - TPS, dropped iteration까지 명확히 보이게
  */
+// export let options = {
+//     scenarios: {
+//         load_test: {
+//             executor: 'constant-arrival-rate',
+//             rate: 6600,              // 목표 iteration/s (GET+POST 1쌍)
+//             timeUnit: '1s',
+//             duration: '3m',
+//             preAllocatedVUs: 2000,
+//             maxVUs: 8000,            // ⚠️ 한계 보려면 여유 있게
+//         },
+//     },
+
 export let options = {
     scenarios: {
         load_test: {
             executor: 'constant-arrival-rate',
-            rate: 6600,              // 목표 iteration/s (GET+POST 1쌍)
+            rate: 250,              // 목표 iteration/s (GET+POST 1쌍)
             timeUnit: '1s',
-            duration: '5m',
-            preAllocatedVUs: 2000,
-            maxVUs: 8000,            // ⚠️ 한계 보려면 여유 있게
+            duration: '3m',
+            preAllocatedVUs: 300,
+            maxVUs: 1500,            // ⚠️ 한계 보려면 여유 있게
         },
     },
 
