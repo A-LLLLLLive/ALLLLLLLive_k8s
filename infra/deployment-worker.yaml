@@ -129,10 +129,10 @@ spec:
         resources:
           requests:
             cpu: "600m"      # 최소 반 개 코어는 확보 (기존 300m에서 상향)
-            memory: "700mi"   # 앱 기본 안정성을 위해 (기존 256Mi에서 상향)
+            memory: "700Mi"   # 앱 기본 안정성을 위해 (기존 256Mi에서 상향)
           limits:
             cpu: "600m"     # 6,000 TPS 피크 시 2코어까지 '버스트' 허용 (가장 중요!)
-            memory: "700mi"
+            memory: "700Mi"
 
         volumeMounts:
         - name: secrets-store-inline
