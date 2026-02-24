@@ -1,55 +1,97 @@
 import http from 'k6/http';
-import { check } from 'k6';
+import { check, sleep } from 'k6';
 
-export const options = {
-  scenarios: {
-    tps_1500_test: {
-      executor: 'constant-arrival-rate',
-      rate: 1500,          // 🎯 목표 TPS
-      timeUnit: '1s',
-      duration: '5m',
-      preAllocatedVUs: 1200,
-      maxVUs: 2000,
+/**
+ * 운영 분석용 옵션
+ * - 모든 percentile 출력
+ * - endpoint / method 별 latency 분리
+ * - TPS, dropped iteration까지 명확히 보이게
+ */
+export let options = {
+    scenarios: {
+        load_test: {
+            executor: 'constant-arrival-rate',
+            rate: 6600,              // 목표 iteration/s (GET+POST 1쌍)
+            timeUnit: '1s',
+            duration: '5m',
+            preAllocatedVUs: 2000,
+            maxVUs: 8000,            // ⚠️ 한계 보려면 여유 있게
+        },
     },
-  },
 
-  thresholds: {
-    // ✅ 실패율 = 실패횟수 / 전체요청
-    http_req_failed: ['rate<0.01'], // 실패율 < 1%
-
-    // ✅ Latency 지표 (초 단위)
-    http_req_duration: [
-      'p(50)<0.2',   // P50 < 200ms
-      'p(75)<0.5',   // P75 < 500ms
-      'p(90)<1.5',   // P90 < 1.5s
-      'p(95)<3',     // P95 < 3s
-      'p(99)<6',     // P99 < 6s
+    // 🔹 percentile 전부 출력
+    summaryTrendStats: [
+        'min',
+        'avg',
+        'med',      // p50
+        'p(75)',
+        'p(90)',
+        'p(95)',
+        'p(99)',
+        'max',
     ],
-  },
+
+    thresholds: {
+        http_req_failed: ['rate<0.01'],
+
+        // 전체
+        http_req_duration: ['p(95)<500'],
+
+        // GET / POST 분리 기준 (태그 기반)
+        'http_req_duration{endpoint:GET_products}': ['p(95)<300'],
+        'http_req_duration{endpoint:POST_orders}': ['p(95)<800'],
+    },
 };
 
 export default function () {
-  const res = http.post(
-    'https://backend.olive0.cloud/oliveyoung/api/orders/complete',
-    JSON.stringify({
-      productId: 12345,
-      quantity: 2,
-      isTodayDelivery: true,
-      totalPrice: 45000,
-      username: 'john_doe',
-      phone: '010-1234-5678',
-      deliveryTimeSlot: '14:00-16:00',
-    }),
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      timeout: '10s',
-    }
-  );
+    /* =========================
+       1️⃣ GET /products
+       ========================= */
+    const getRes = http.get(
+        'https://backend.olive0.cloud/oliveyoung/api/products',
+        {
+            tags: {
+                endpoint: 'GET_products',
+                method: 'GET',
+            },
+        }
+    );
 
-  // 🔥 200만 성공으로 간주 → 나머지는 전부 실패
-  check(res, {
-    'status is 200': (r) => r.status === 200,
-  });
+    check(getRes, {
+        'GET /products status 200': (r) => r.status === 200,
+    });
+
+    // 실사용자 think time (아주 짧게)
+    sleep(0.01);
+
+    /* =========================
+       2️⃣ POST /orders/complete
+       ========================= */
+    const payload = JSON.stringify({
+        productId: 12345,
+        quantity: 2,
+        isTodayDelivery: true,
+        totalPrice: 45000,
+        username: 'john_doe',
+        phone: '010-1234-5678',
+        deliveryTimeSlot: '14:00-16:00',
+    });
+
+    const params = {
+        headers: { 'Content-Type': 'application/json' },
+        tags: {
+            endpoint: 'POST_orders',
+            method: 'POST',
+        },
+    };
+
+    const postRes = http.post(
+        'https://backend.olive0.cloud/oliveyoung/api/orders/complete',
+        payload,
+        params
+    );
+
+    check(postRes, {
+        'POST /orders/complete status 200': (r) => r.status === 200,
+    });
 }
