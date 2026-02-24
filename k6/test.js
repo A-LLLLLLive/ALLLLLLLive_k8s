@@ -11,7 +11,7 @@ export let options = {
     scenarios: {
         load_test: {
             executor: 'constant-arrival-rate',
-            rate: 6600,              // 목표 iteration/s (GET+POST 1쌍)
+            rate: 3300,              // 목표 iteration/s (GET+POST 1쌍)
             timeUnit: '1s',
             duration: '3m',
             preAllocatedVUs: 2000,
