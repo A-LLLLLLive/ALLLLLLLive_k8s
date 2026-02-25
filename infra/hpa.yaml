@@ -7,7 +7,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: alive-deployment 
-  minReplicas: 20
+  minReplicas: 25
   maxReplicas: 30
   metrics:
   - type: Resource
