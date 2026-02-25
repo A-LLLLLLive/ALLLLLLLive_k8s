@@ -11,11 +11,11 @@ export let options = {
     scenarios: {
         load_test: {
             executor: 'constant-arrival-rate',
-            rate: 5000,              // 목표 iteration/s (GET+POST 1쌍)
+            rate: 3500,              // 목표 iteration/s (GET+POST 1쌍)
             timeUnit: '1s',
             duration: '3m',
-            preAllocatedVUs: 2000,
-            maxVUs: 8000,            // ⚠️ 한계 보려면 여유 있게
+            preAllocatedVUs: 1500,
+            maxVUs: 6000,            // ⚠️ 한계 보려면 여유 있게
         },
     },
 
